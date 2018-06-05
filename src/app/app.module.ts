@@ -13,7 +13,8 @@ import {AgmCoreModule} from  "@agm/core";
 import {Geolocation} from "@ionic-native/geolocation";
 import {Camera} from "@ionic-native/camera";
 import {PlacesService} from "../services/places";
-import {Storage} from "@ionic/storage";
+import {IonicStorageModule} from "@ionic/storage";
+import {File} from "@ionic-native/file";
 
 @NgModule({
   declarations: [
@@ -28,6 +29,7 @@ import {Storage} from "@ionic/storage";
       apiKey: 'AIzaSyAp33EdG9_R_YAgZyn6HKWNs4YF40vxsEU'
     }),
     BrowserModule,
+    IonicStorageModule.forRoot(),
     IonicModule.forRoot(MyApp)
   ],
   bootstrap: [IonicApp],
@@ -42,7 +44,7 @@ import {Storage} from "@ionic/storage";
     StatusBar,
     Geolocation,
     Camera,
-    Storage,
+    File,
     SplashScreen,
     PlacesService,
     {provide: ErrorHandler, useClass: IonicErrorHandler}

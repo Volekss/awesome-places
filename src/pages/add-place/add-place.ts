@@ -4,7 +4,7 @@ import {LoadingController, ModalController, ToastController} from "ionic-angular
 import {SetLocationPage} from "../set-location/set-location";
 import {Location} from "../../models/location";
 import {Geolocation} from "@ionic-native/geolocation";
-import {File} from "@ionic-native/file";
+import {Entry, File} from "@ionic-native/file";
 import {Camera, CameraOptions} from "@ionic-native/camera";
 import {PlacesService} from "../../services/places";
 
@@ -29,8 +29,8 @@ export class AddPlacePage {
               private placesService: PlacesService, private file: File) {}
 
   onSubmit(form: NgForm) {
-    const values = form.value;
-    this.placesService.addPlace(values.title, values.description, this.location, this.imageURL);
+    this.placesService
+      .addPlace(form.value.title, form.value.description, this.location, this.imageURL);
     form.reset();
     this.location = {
       lat: 40.7624324,
@@ -77,10 +77,7 @@ export class AddPlacePage {
 
   onTakePhoto() {
     const options: CameraOptions = {
-      quality: 50,
-      destinationType: this.camera.DestinationType.FILE_URI,
-      encodingType: this.camera.EncodingType.JPEG,
-      mediaType: this.camera.MediaType.PICTURE
+      encodingType: this.camera.EncodingType.JPEG
     };
 
     this.camera.getPicture(options).then((imageData) => {
@@ -89,7 +86,7 @@ export class AddPlacePage {
       const newFileName = new Date().getUTCMilliseconds() + '.jpg';
       this.file.moveFile(path, currentName, cordova.file.dataDirectory, newFileName)
         .then(
-          data => {
+          (data: Entry)=> {
             this.imageURL = data.nativeURL;
             this.file.removeFile(path, currentName);
           }

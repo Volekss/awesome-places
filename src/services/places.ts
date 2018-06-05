@@ -15,14 +15,11 @@ export class PlacesService {
 
 
   addPlace(title: string, description: string, location: Location, imageURL: string) {
+    console.log('addPlace called');
     const place = new Place(title, description, location, imageURL);
-    this.places.push();
+    this.places.push(place);
     this.storage.set('places', this.places)
-      .then(
-        data => {
-
-        }
-      )
+      .then()
       .catch(
         err => {
           this.places.splice(this.places.indexOf(place), 1);
@@ -66,12 +63,14 @@ export class PlacesService {
   }
 
   private removeFile(place: Place) {
-    const currentName =  place.imagePath.replace(/^.*[\\\/]/, '');
+    const currentName = place.imagePath.replace(/^.*[\\\/]/, '');
     this.file.removeFile(cordova.file.dataDirectory, currentName)
-      .then()
+      .then(
+        () => console.log('Removed File')
+      )
       .catch(
         () => {
-          console.log('Error while removing file');
+          console.log('Error while removing File');
           this.addPlace(place.title, place.description, place.location, place.imagePath);
         }
       );

@@ -99,13 +99,13 @@
           <img [src]="imageURL">
         </ion-col>
       </ion-row>
-
       <ion-row>
+        <!--|| imageURL == ''-->
         <ion-col>
           <button ion-button
                   color="secondary"
                   block
-                  [disabled]="!f.valid || !isLocationSet || imageURL == ''"
+                  [disabled]="!f.valid || !isLocationSet "
                   type="submit">
             Add this Place
           </button>

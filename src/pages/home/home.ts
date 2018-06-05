@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {ModalController} from 'ionic-angular';
+import {ModalController, ToastController} from 'ionic-angular';
 import {AddPlacePage} from "../add-place/add-place";
 import {Place} from "../../models/place";
 import {PlacesService} from "../../services/places";
@@ -13,7 +13,7 @@ export class HomePage implements OnInit {
   addPlacePage = AddPlacePage;
   places: Place[] = [];
 
-  constructor(private modalCtrl: ModalController, private placesService: PlacesService) { }
+  constructor(private modalCtrl: ModalController, private placesService: PlacesService, private toastCtrl: ToastController) { }
 
   ngOnInit() {
     this.placesService.fetchPlaces()
@@ -22,12 +22,25 @@ export class HomePage implements OnInit {
       );
   }
 
-  ionViewWillEner() {
+  ionViewWillEnter() {
     this.places = this.placesService.loadPlaces();
   }
 
   onOpenPlace(place: Place, index: number) {
-    this.modalCtrl.create(PlacePage, {place: Place, index: index}).present();
+    const modal = this.modalCtrl.create(PlacePage, {place: place, index: index});
+    modal.present().then().catch(
+      (err) => {
+        const toast = this.toastCtrl.create({
+          message: err,
+          duration: 2500
+        });
+        toast.present();
+      });
+    modal.onDidDismiss(
+      () => {
+        this.places = this.placesService.loadPlaces();
+      }
+    );
   }
 
 
